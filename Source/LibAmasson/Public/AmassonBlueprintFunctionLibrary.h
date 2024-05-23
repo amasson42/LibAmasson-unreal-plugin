@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "GameFramework/GameStateBase.h"
+#include "GameFramework/GameModeBase.h"
+#include "Engine/GameInstance.h"
 #include "AmassonBlueprintFunctionLibrary.generated.h"
 
 /**
@@ -16,14 +19,14 @@ class LIBAMASSON_API UAmassonBlueprintFunctionLibrary : public UBlueprintFunctio
 
 public:
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game")
-	static AGameStateBase* GetGameState(const UObject* WorldContextObject);
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game", meta = (DefaultToSelf = "WorldContextObject", DeterminesOutputType = "GameStateClass"))
+	static AGameStateBase* GetGameState(const UObject* WorldContextObject, TSubclassOf<AGameStateBase> GameStateClass);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game")
-	static AGameModeBase* GetGameMode(const UObject* WorldContextObject);
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game", meta = (DefaultToSelf = "WorldContextObject", DeterminesOutputType = "GameModeClass"))
+	static AGameModeBase* GetGameMode(const UObject* WorldContextObject, TSubclassOf<AGameModeBase> GameModeClass);
 
-    UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game")
-	static UGameInstance* GetGameInstance(const UObject* WorldContextObject);
+    UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game" , meta = (DefaultToSelf = "WorldContextObject", DeterminesOutputType = "GameInstanceClass"))
+	static UGameInstance* GetGameInstance(const UObject* WorldContextObject, TSubclassOf<UGameInstance> GameInstanceClass);
 
 
     UFUNCTION(BlueprintCallable)
