@@ -14,6 +14,17 @@ UWidgetControllerComponent* UControllableUserWidget::GetComponentFromControllerB
     return WidgetController->GetComponentByClass(ComponentClass);
 }
 
+void UControllableUserWidget::NativeConstruct()
+{
+    Super::NativeConstruct();
+
+    if (IsValid(WidgetController))
+    {
+        SetWidgetController(WidgetController);
+        WidgetController->BroadcastValues();
+    }
+}
+
 void UControllableUserWidget::SetWidgetController(UWidgetController* NewWidgetController)
 {
     WidgetController = NewWidgetController;

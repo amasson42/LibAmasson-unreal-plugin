@@ -59,6 +59,8 @@ public:
 
 protected:
 
+    virtual void NativeConstruct() override;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Controller")
 	void WidgetControllerSet(UWidgetController* NewWidgetController);
 
@@ -68,8 +70,8 @@ protected:
     UFUNCTION()
     virtual void OnWidgetControllerUpdateState(FName State);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Controller", meta = (AllowPrivateAccess = true))
-	TObjectPtr<UWidgetController> WidgetController;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Controller", meta = (AllowPrivateAccess = true, ExposeOnSpawn = true))
+	TObjectPtr<UWidgetController> WidgetController = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Controller|Propagation")
 	bool TakeControllerFromParent = true;
