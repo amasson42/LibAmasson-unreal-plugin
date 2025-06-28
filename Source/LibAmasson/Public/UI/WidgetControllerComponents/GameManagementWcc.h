@@ -19,8 +19,7 @@ class LIBAMASSON_API UGameManagementWcc : public UWidgetControllerComponent
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "Initialize")
-	void Initialize(UObject* WorldContextObject);
+	virtual void SetObservedActor(AActor* Actor) override;
 
 
 	/** GameplayStatics */

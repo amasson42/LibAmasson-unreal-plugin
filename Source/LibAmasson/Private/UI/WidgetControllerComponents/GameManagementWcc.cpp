@@ -5,9 +5,9 @@
 #include "Kismet/GameplayStatics.h"
 
 
-void UGameManagementWcc::Initialize(UObject* InWorldContextObject)
+void UGameManagementWcc::SetObservedActor(AActor* Actor)
 {
-    WorldContextObject = InWorldContextObject;
+    WorldContextObject = Actor;
 }
 
 

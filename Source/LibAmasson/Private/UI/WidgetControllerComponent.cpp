@@ -10,6 +10,11 @@ void UWidgetControllerComponent::BroadcastValues()
     BP_BroadcastValues();
 }
 
+void UWidgetControllerComponent::SetObservedActor(AActor* Actor)
+{
+    BP_SetObservedActor(Actor);
+}
+
 void UWidgetControllerComponent::BindCallbacksToDependencies()
 {
     BP_BindCallbacksToDependencies();

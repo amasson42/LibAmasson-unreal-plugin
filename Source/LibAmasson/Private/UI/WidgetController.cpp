@@ -5,13 +5,18 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/PlayerState.h"
 #include "GameFramework/Pawn.h"
-#include "GameFramework/Character.h"
 #include "UI/WidgetControllerComponent.h"
 
 
 UWidgetController::UWidgetController()
 {
 
+}
+
+void UWidgetController::Construct()
+{
+    for (const auto& ComponentClass : ComponentsClass)
+        AddComponentByClass(ComponentClass.Value, ComponentClass.Key);
 }
 
 UWidgetController* UWidgetController::MakeWidgetController(UObject* Outer, TSubclassOf<UWidgetController> WidgetControllerClass, AActor* ObservedActor)
@@ -44,8 +49,6 @@ void UWidgetController::SetObservedController(AController* InController)
         PlayerState = nullptr;
     Pawn = InController->GetPawn();
     Actor = InController;
-
-    FinishSetObserved();
 }
 
 void UWidgetController::SetObservedPlayerState(APlayerState* InPlayerState)
@@ -56,8 +59,6 @@ void UWidgetController::SetObservedPlayerState(APlayerState* InPlayerState)
     PlayerState = InPlayerState;
     Pawn = InPlayerState->GetPawn();
     Actor = InPlayerState;
-
-    FinishSetObserved();
 }
 
 void UWidgetController::SetObservedPawn(APawn* InPawn)
@@ -71,8 +72,6 @@ void UWidgetController::SetObservedPawn(APawn* InPawn)
         PlayerState = nullptr;
     Pawn = InPawn;
     Actor = InPawn;
-
-    FinishSetObserved();
 }
 
 void UWidgetController::SetObservedActor(AActor* InActor, bool bTryCast)
@@ -82,25 +81,34 @@ void UWidgetController::SetObservedActor(AActor* InActor, bool bTryCast)
     if (bTryCast)
     {
         if (AController* AsPC = Cast<AController>(InActor))
-        {
-            return SetObservedController(AsPC);
-        }
+            SetObservedController(AsPC);
         else if (APlayerState* AsPS = Cast<APlayerState>(InActor))
-        {
-            return SetObservedPlayerState(AsPS);
-        }
+            SetObservedPlayerState(AsPS);
         else if (APawn* AsPawn = Cast<APawn>(InActor))
+            SetObservedPawn(AsPawn);
+    }
+    else
+    {
+        Controller = nullptr;
+        PlayerState = nullptr;
+        Pawn = nullptr;
+        Actor = InActor;
+    }
+    
+    for (UWidgetControllerComponent* Wcc : Components)
+    {
+        if (IsValid(Wcc))
         {
-            return SetObservedPawn(AsPawn);
+            Wcc->SetObservedActor(InActor);
+            Wcc->BP_SetObservedActor(InActor);
         }
     }
 
-    Controller = nullptr;
-    PlayerState = nullptr;
-    Pawn = nullptr;
-    Actor = InActor;
+    ObservedActorSet();
+    BP_ObservedActorSet();
 
-    FinishSetObserved();
+    BindCallbacksToDependencies();
+    BP_BindCallbacksToDependencies();
 }
 
 void UWidgetController::BroadcastValues()
@@ -167,13 +175,4 @@ UWidgetControllerComponent* UWidgetController::AddComponentByClass(TSubclassOf<U
     UWidgetControllerComponent* NewComponent = NewObject<UWidgetControllerComponent>(this, ComponentClass, ComponentName);
     Components.Add(NewComponent);
     return NewComponent;
-}
-
-void UWidgetController::FinishSetObserved()
-{
-    ObservedActorSet();
-    BP_ObservedActorSet();
-
-    BindCallbacksToDependencies();
-    BP_BindCallbacksToDependencies();
 }

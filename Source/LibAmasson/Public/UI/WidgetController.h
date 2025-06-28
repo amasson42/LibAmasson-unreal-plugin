@@ -106,7 +106,7 @@ public:
 protected:
 
 	UFUNCTION()
-	virtual void Construct() {}
+	virtual void Construct();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Construction", DisplayName = "Construct")
 	void BP_Construct();
@@ -122,10 +122,6 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Broadcast", DisplayName = "BindCallbacksToDependencies")
 	void BP_BindCallbacksToDependencies();
-
-	/** Called at the end of controller SetObserved_X */
-	UFUNCTION(BlueprintCallable, Category = "Observed")
-	void FinishSetObserved();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Broadcast", DisplayName = "BroadcastValues")
 	void BP_BroadcastValues();
@@ -145,4 +141,7 @@ protected:
 	UPROPERTY()
 	TArray<TObjectPtr<UWidgetControllerComponent>> Components;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+	TMap<FName, TSubclassOf<UWidgetControllerComponent>> ComponentsClass;
+	
 };

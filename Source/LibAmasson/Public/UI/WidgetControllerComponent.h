@@ -28,6 +28,12 @@ public:
 protected:
 
 	UFUNCTION()
+	virtual void SetObservedActor(AActor* Actor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bind", DisplayName = "SetObservedActor")
+	void BP_SetObservedActor(AActor* Actor);
+
+	UFUNCTION()
 	virtual void BindCallbacksToDependencies();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Bind", DisplayName = "BindCallbacksToDependencies")
